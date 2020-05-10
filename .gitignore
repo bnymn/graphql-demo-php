@@ -1,6 +1,5 @@
 /.idea
 /.env
-/src/*
-!/src/.gitkeep
+/src/vendor
 /services/nginx/sites-available/default.conf
 /services/php-fpm/etc/php/php.ini

@@ -2,7 +2,7 @@ version: '3'
 services:
     web:
         build:
-            context: ./nginx
+            context: ./services/nginx
             args:
                 USER_ID: ${USER_ID}
                 GROUP_ID: ${GROUP_ID}
@@ -17,22 +17,12 @@ services:
           - php-fpm
     php-fpm:
         build:
-            context: ./php-fpm
+            context: ./services/php-fpm
             args:
                 USER_ID: ${USER_ID}
                 GROUP_ID: ${GROUP_ID}
-                BUILD_ENV: ${BUILD_ENV}
         volumes:
             - ./src:/var/www
         environment:
-            - DB_NAME_TEST
-            - DB_HOST
-            - DB_NAME
-            - DB_USER
-            - DB_PASS
-            - DB_PORT
             - COMPOSER_HOME=/home/user/.composer
-            - PHP_IDE_CONFIG=serverName=clm2.localhost
-        command: /bin/sh -c "/scripts/run.sh"
-        depends_on:
-            - db
+            - PHP_IDE_CONFIG=serverName=${APP_DOMAIN}
