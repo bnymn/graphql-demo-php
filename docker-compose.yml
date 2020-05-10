@@ -1,28 +1,15 @@
 version: '3'
 services:
-    web:
-        build:
-            context: ./services/nginx
-            args:
-                USER_ID: ${USER_ID}
-                GROUP_ID: ${GROUP_ID}
-        volumes: 
-            - ./src:/var/www
-        environment:
-            APP_DOMAIN: ${APP_DOMAIN}
-        ports:
-            - "80:80"
-        command: /bin/sh -c "/scripts/run.sh"
-        depends_on:
-          - php-fpm
     php-fpm:
         build:
             context: ./services/php-fpm
             args:
                 USER_ID: ${USER_ID}
                 GROUP_ID: ${GROUP_ID}
+        tty: true
         volumes:
             - ./src:/var/www
         environment:
             - COMPOSER_HOME=/home/user/.composer
-            - PHP_IDE_CONFIG=serverName=${APP_DOMAIN}
+        ports:
+            - "8080:8080"
