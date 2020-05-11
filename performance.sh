@@ -31,22 +31,8 @@ set -o errexit
 #        if a given load-balancer in the middle might be
 #        messing up with some requests.
 main () {
-  local url=$1
-
-  if [[ -z "$url" ]]; then
-    echo "ERROR:
-  An URL must be provided.
-
-  Usage: check-res <url>
-
-Aborting.
-    "
-    exit 1
-  fi
-
-  print_header
   for i in `seq 1 10`; do
-    make_request $url
+    make_request
     sleep 1
   done
 }
@@ -54,21 +40,22 @@ Aborting.
 # This method does nothing more that just print a CSV
 # header to STDOUT so we can consume that later when
 # looking at the results.
-print_header () {
-  echo "code,time_total,time_connect,time_appconnect,time_starttransfer"
-}
+# print_header () {
+#   # echo "code,time_total,time_connect,time_appconnect,time_starttransfer"
+# }
 
 # Make request performs the actual request using `curl`. 
 # It specifies those parameters that we've defined before,
 # taking a given `url` as its parameter.
+# --write-out "%{http_code},\"%{time_total}\",\"%{time_connect}\",\"%{time_appconnect}\",\"%{time_starttransfer}\"\n" \
 make_request () {
-  local url=$1
-
   curl \
-    --write-out "%{http_code},\"%{time_total}\",\"%{time_connect}\",\"%{time_appconnect}\",\"%{time_starttransfer}\"\n" \
+    --location --request POST 'http://127.0.0.1:8080' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{"query":"query {\n    products {\n        id\n        name\n        price\n        sku\n        related_products {\n            id\n            name\n            price\n            sku\n        }\n    }\n}","variables":{}}' \
+    --write-out "%{time_total}\n" \
     --silent \
-    --output /dev/null \
-    "$url"
+    --output /dev/null
 }
 
 main "$@"
