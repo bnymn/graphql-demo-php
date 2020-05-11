@@ -65,7 +65,7 @@ make_request () {
   local url=$1
 
   curl \
-    --write-out "%{http_code},%{time_total},%{time_connect},%{time_appconnect},%{time_starttransfer}\n" \
+    --write-out "%{http_code},\"%{time_total}\",\"%{time_connect}\",\"%{time_appconnect}\",\"%{time_starttransfer}\"\n" \
     --silent \
     --output /dev/null \
     "$url"
