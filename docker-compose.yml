@@ -13,3 +13,4 @@ services:
             - COMPOSER_HOME=/home/user/.composer
         ports:
             - "8080:8080"
+        command: /bin/bash -c "php -S 0.0.0.0:8080 ./index.php"
