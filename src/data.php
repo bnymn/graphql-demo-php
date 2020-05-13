@@ -12,7 +12,7 @@ function get_product() {
 function get_products($size)
 {
     $products = [];
-    for ($i=0; $i<1000; $i++) {
+    for ($i=0; $i<$size; $i++) {
         $product = get_product();
         for ($k=0; $k<4; $k++) {
             $product['related_products'][] = get_product();
