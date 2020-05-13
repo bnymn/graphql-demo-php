@@ -18,8 +18,4 @@ for ($i=0; $i<1000; $i++) {
     $products[] = $product;
 }
 
-return [
-    'products' => function($root, $args, $context) use ($products) {
-        return $products;
-    },
-];
+return $products;
